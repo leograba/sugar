@@ -67,7 +67,7 @@ func main() {
 	// Parse sentence to sweeten
 	args := os.Args[1:]
 	if len(args) == 0 {
-		fmt.Println("Usage: ./friendly_app <blunt_sentence>")
+		fmt.Println("Usage: ./sugar <blunt_sentence>")
 		return
 	}
 	bluntSentence := strings.Join(args, " ")
