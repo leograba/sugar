@@ -16,6 +16,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: 'Create dotenv file'
+        run: |
+          touch .env
+          echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} >> .env
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
@@ -36,6 +41,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: 'Create dotenv file'
+        run: |
+          touch .env
+          echo OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }} >> .env
 
       - name: Set up Python
         uses: actions/setup-python@v5
