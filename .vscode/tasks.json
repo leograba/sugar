@@ -8,7 +8,7 @@
             "args": [
                 "build",
                 "-o",
-                "dist/sugar-go",
+                "dist/sugar",
                 "sugar.go"
             ],
             "group": {
