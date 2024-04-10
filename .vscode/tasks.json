@@ -2,34 +2,6 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Package Python Script",
-            "type": "shell",
-            "command": "pyinstaller",
-            "args": [
-                "--onefile",
-                "--upx-dir=/usr/bin",
-                "--name=sugar-py",
-                "--add-data='.env:.'",  // Adjust this line if you want to include additional files
-                "sugar.py"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            },
-            "problemMatcher": {
-                "owner": "python",
-                "fileLocation": ["relative", "${workspaceFolder}"],
-                "pattern": {
-                    "regexp": "^(.*)$",
-                    "message": 1
-                }
-            }
-        },
-        {
             "label": "Build Go App",
             "type": "shell",
             "command": "go",
