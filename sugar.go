@@ -19,7 +19,7 @@ func loadDotenv() {
 	err := godotenv.Load()
 
 	// If dotenv file is not found in directory, use embedded content
-	if len(os.Getenv("OPENAI_API_KEY")) == 0 {
+	if err != nil {
 		lines := strings.Split(embeddedEnvContent, "\n")
 		for _, line := range lines {
 			parts := strings.SplitN(line, "=", 2)
