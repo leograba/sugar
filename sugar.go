@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"context"
 	"fmt"
 	"os"
@@ -10,14 +11,32 @@ import (
 	openai "github.com/sashabaranov/go-openai"
 )
 
-func makeSentenceMoreFriendly(sentence string) (string, error) {
+//go:embed .env
+var embeddedEnvContent string
+
+func loadDotenv() {
+	// Try to load dotenv from file in directory
 	err := godotenv.Load()
-	if err != nil {
-		return "", err
+
+	// If dotenv file is not found in directory, use embedded content
+	if len(os.Getenv("OPENAI_API_KEY")) == 0 {
+		lines := strings.Split(embeddedEnvContent, "\n")
+		for _, line := range lines {
+			parts := strings.SplitN(line, "=", 2)
+			if len(parts) == 2 {
+				key := parts[0]
+				value := parts[1]
+				os.Setenv(key, value)
+			}
+		}
 	}
+}
 
-	client := openai.NewClient(os.Getenv("OPENAI_API_KEY"))
+func makeSentenceMoreFriendly(sentence string, apiKey string) (string, error) {
+	// Create client with API key
+	client := openai.NewClient(apiKey)
 
+	// Call the function that returns the chat completion
 	response, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
@@ -44,19 +63,26 @@ func makeSentenceMoreFriendly(sentence string) (string, error) {
 }
 
 func main() {
+
+	// Parse sentence to sweeten
 	args := os.Args[1:]
 	if len(args) == 0 {
 		fmt.Println("Usage: ./friendly_app <blunt_sentence>")
 		return
 	}
-
 	bluntSentence := strings.Join(args, " ")
-	
-	friendlySentence, err := makeSentenceMoreFriendly(bluntSentence)
+
+	// Load OpenAI API key
+	loadDotenv()
+	apiKey := os.Getenv("OPENAI_API_KEY")
+
+	// Sweeten the sentence with GPT
+	friendlySentence, err := makeSentenceMoreFriendly(bluntSentence, apiKey)
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
+	// The only program output is the rewritten sentence
 	fmt.Println(friendlySentence)
 }
